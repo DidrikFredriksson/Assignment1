@@ -1,40 +1,37 @@
 import numpy as np
 from sklearn.linear_model import LinearRegression
+# This code contains functions that calculates the mean and variance of a list of data
+# It also contains a function that uses least squares estimation to estimate a future value for a list of data with a list of corresponding years
+
 
 def mean(values):
-    #Calculate the mean value in the given timespan
-    return sum(values) / len(values)
+    # Calculate the mean value in the given timespan
+    valuesNpArray = np.array(values)
+    meanAnswer = sum(valuesNpArray) / len(valuesNpArray)
+    return meanAnswer
+
 
 def variance(values):
-    #calculate the variance
-    meanValue = sum(values) / len(values)
+    # Calculate the variance
+    valuesNpArray = np.array(values)
+    meanValue = sum(valuesNpArray) / len(valuesNpArray)
     sumDeviationSquared = 0
-    for price in values:
+    for price in valuesNpArray:
         sumDeviationSquared += (price - meanValue) ** 2
-    return sumDeviationSquared / (len(values) - 1)
+    varianceAnswer = sumDeviationSquared / (len(valuesNpArray) - 1)
+    return varianceAnswer
 
-def leastSquaresEstimate(years, prices):
-    #Using the least squares method to estimate a price for a future year (year chosen by the user)
-    model = LinearRegression().fit(years.reshape(-1, 1), prices)
-    #Error handling if the input of a year is not a number
-    while True:
-        try:
-            future_year = int(input("Enter a future year to estimate the price of a can of Coke then: "))
-            break
-        except ValueError:
-            print("That is not a valid year, try again with numbers")
-    return model.predict([[future_year]])[0], future_year
 
-def main():
-    #Data for prices of a can of Coke (in Kronor) and corresponding years as numpy arrays
-    prices = np.array([8.4, 9.0, 9.4, 9.8, 10.2])
-    years = np.array([2016, 2018, 2020, 2022, 2024])
-    
-    #Using the least squares method to estimate a future price for a can of Coke
-    leastSquareAns = leastSquaresEstimate(years, prices)
-    
-    #Printing the data for the price of a can of Coke
-    print("\nMean price: " + str(round(mean(prices), 2)) + " Kr")
-    print("Variance of price: " + str(round(variance(prices), 4)))
-    print("Estimated price in " + str(leastSquareAns[1]) + " (using Least squares method): " + str(round(leastSquareAns[0], 2)) + " Kr")
-main()
+def leastSquaresEstimate(years, prices, futureYear):
+    # Using the least squares method to estimate a price for a future year (year chosen by the user)
+    yearsNpArray = np.array(years)
+    pricesNpArray = np.array(prices)
+    model = LinearRegression().fit(yearsNpArray.reshape(-1, 1), pricesNpArray)
+    # Error handling if the input of the future year is not a number
+    if not type(futureYear) is int:
+        raise ValueError("Enter a future year using digits only")
+    # Error handling if the input of the future year is not a year in the future
+    if futureYear < 2025:
+        raise ValueError("Please enter the future year as 2025 or a later year")
+    futurePrice = model.predict([[futureYear]])[0]
+    return futurePrice
