@@ -1,0 +1,3 @@
+In order to run this repository, the following libraries must be installed:
+- numpy
+- scikit-learn
