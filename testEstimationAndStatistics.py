@@ -7,7 +7,7 @@ prices = [8.4, 9.0, 9.4, 9.8, 10.2]
 years = [2016, 2018, 2020, 2022, 2024]
 
 
-class testEstimationAndStatistics(unittest.TestCase):
+class TestEstimationAndStatistics(unittest.TestCase):
     def testMean(self):
         # Test if the mean function calulates the right mean
         self.assertAlmostEqual(mean(prices), 9.36)
